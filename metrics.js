@@ -1082,7 +1082,7 @@ window.onload = () => {
                       "cdwcloudms": "81929398-ea15-429d-8259-a85d54c05e9b",
                       "cdwcloudsolutioncentre": "4c2a8892-8b0d-415d-84a5-9cadeba8c67a"
                   },
-                  "baseAPIGatewayURL": "https://11iu54aaq1.execute-api.us-east-1.amazonaws.com/csc-cloud"
+                  "baseAPIGatewayURL": "https://a37xf754ya.execute-api.us-east-1.amazonaws.com/csccloud"
               }
           },
 
