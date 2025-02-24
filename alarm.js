@@ -1,167 +1,98 @@
-let alarmsData = []; // Global variable to store alarms data
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="metrics.css">
+    <script src="https://kit.fontawesome.com/2a56506141.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.anychart.com/releases/8.13.0/js/anychart-base.min.js" type="text/javascript"></script>
+    <script src="https://cdn.anychart.com/releases/8.13.0/js/anychart-core.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/8.13.0/js/anychart-circular-gauge.min.js"></script>
+    <script src="alarm.js"></script>
+    <title>Alarm Page</title>
+</head>
+<body>
+    <!-- Navigation bar -->
+    <nav class="navigation-bar">
+        <div class="navigation-wrapper">
+            <div class="navigation-left-content">
+                <div class="cdw-logo">
+                    <img src="./images/logo.svg" alt="CDW Logo">
+                </div>
+                <div class="nav-links" onclick="showMetrics()">Metrics</div>
+                <div class="nav-links" onclick="showDashboards()">Dashboards</div>
+                <div class="nav-links active">Alarms</div>
+            </div>
+            <div class="navigation-right-content">
+                <!-- Existing Logout Link -->
+                <div>
+                    <div class="toggle-container2" onclick="toggleDarkMode()">
+                        <div class="toggle-btn2">🌙</div>
+                    </div>
+                </div>
+                <div>
+                    <a class="nav-links" href="https://cskcustomer1.s3.us-east-1.amazonaws.com/logged_out.html"
+                        class="text-center">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
 
-// Function to get available accounts and their respective API URLs
-function getAccountsAlarmsAPI() {
-    const allAccountsAlarmsList = [
-        {
-            "MAS Sandbox Development": {
-                "cloudWatchAPI": "https://szw9nl20j5.execute-api.us-east-1.amazonaws.com/test/getalarm"
-            }
-        },
-        {
-            "MAS Sandbox Test1": {
-                "cloudWatchAPI": "https://8vauowiu26.execute-api.us-east-1.amazonaws.com/test/getalarm"
-            }
-        },
-        {
-            "MAS Sandbox Test2": {
-                "cloudWatchAPI": "https://9v5jzdmc6a.execute-api.us-east-1.amazonaws.com/test/getalarm"
+    <!-- Existing Content -->
+     <br>
+     <br>
+     <br>
+     <br>
+     <br>
+     <br>
+
+    <div class="d-flex">
+        <label for="customerAccounts" class="mt-2">Accounts : </label>
+        <select id="customerAccounts" class="p-2 cursor-pointer" onchange="customerAccountChange(event)">
+            <option disabled selected hidden>--Select--</option>
+            <option value="MAS Sandbox Development">MAS Sandbox Development</option>
+            <option value="MAS Sandbox Test1">MAS Sandbox Test1</option>
+            <option value="MAS Sandbox Test2">MAS Sandbox Test2</option>
+        </select>
+    </div>
+
+    <div class="d-flex ml-4">
+        <label for="alarmState" class="mt-2">State : </label>
+        <select id="alarmState" class="p-2 cursor-pointer" onchange="filterByState(event)">
+            <option value="">All Alarms</option>
+            <option value="ok">OK</option>
+            <option value="alarm">Alarm</option>
+            <option value="INSUFFICIENT_DATA">Insufficient Data</option>
+        </select>
+    </div>
+
+        <div class="w-100" id="dataTables">
+            <div class="alarms-container" id="alarmsList">
+                <table></table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Copyright and Powered by CDW -->
+    <div class="powered-by-cdw">
+        <span>© MetricVision 2025, Powered by</span>
+        <img src="https://cskcustomer1.s3.us-east-1.amazonaws.com/cdw-2023-Red-Panel.png" alt="CDW Logo">
+    </div>
+    
+    <script>
+         window.onload = () => {
+            if (window.location.hash) {
+                let hash = window.location.hash;
+                let token = hash.split("access_token=")[1].split("&")[0];
+                sessionStorage.setItem("MetricVisionAccessToken", token)
             }
         }
-    ];
-    return allAccountsAlarmsList;
-}
+    </script>
 
-// Updated customerAccountChange to automatically trigger fetch when account is selected
-function customerAccountChange(event) {
-    const selectedAccount = event.target.value;
-    if (selectedAccount) {
-        getAlarmsData(selectedAccount);
-    }
-}
-
-// Function to filter the table based on selected state
-function filterByState(event) {
-    const selectedState = event.target.value.trim().toLowerCase(); // Get and trim the selected state value
-    
-    // If no state is selected, show all alarms
-    if (!selectedState) {
-        displayTable(alarmsData); // Display all data if no filter is selected
-    } else {
-        // Filter alarms based on the selected state
-        const filteredAlarms = alarmsData.filter(alarm => 
-            alarm.State && alarm.State.toLowerCase() === selectedState // Match based on the 'State' field
-        );
-
-        if (filteredAlarms.length > 0) {
-            displayTable(filteredAlarms); // Display the filtered table
-        } else {
-            // If no alarms match the selected state, show a message
-            displayTable([]);
-        }
-    }
-}
-
-// Function to create a table from the alarms data
-function createTable(alarms) {
-    alarmsData = alarms; // Store alarms globally
-
-    // Display the table based on filtered data
-    displayTable(alarms);
-}
-
-// Function to display the table
-function displayTable(alarms) {
-    const table = $('#alarmsList table');
-    
-    // Clear existing table content
-    table.empty();
-    
-    // If no alarms are available
-    if (alarms.length === 0) {
-        table.append('<tbody><tr><td colspan="5">No alarms found for the selected state.</td></tr></tbody>');
-        return;
-    }
-
-    // Create table header
-    const headers = Object.keys(alarms[0]);
-    let headerHtml = '<thead><tr>';
-    
-    headers.forEach(headerText => {
-        headerHtml += `<th>${headerText}</th>`;
-    });
-    
-    headerHtml += '</tr></thead>';
-    table.append(headerHtml);
-    
-    // Create table body
-    let bodyHtml = '<tbody>';
-    
-    alarms.forEach(alarm => {
-        bodyHtml += '<tr>';
-        headers.forEach(header => {
-            if (header.toLowerCase() === 'state' && alarm[header].toLowerCase() === 'alarm') {
-                bodyHtml += `<td class="red">${alarm[header]}</td>`;
-            } else {
-                bodyHtml += `<td>${alarm[header]}</td>`;
-            }
-        });
-        bodyHtml += '</tr>';
-    });
-    
-    bodyHtml += '</tbody>';
-    table.append(bodyHtml);
-}
-
-// Function to get alarms data from CloudWatch API for the selected account
-async function getAlarmsData(selectedAccount) {
-    const accounts = getAccountsAlarmsAPI();
-
-    let apiURL = accounts
-        .filter(account => account[selectedAccount])
-        .map(account => account[selectedAccount].cloudWatchAPI)[0];
-
-    // Get the access token from sessionStorage
-    const token = sessionStorage.getItem("MetricVisionAccessToken");
-
-    if (!token) {
-        console.error("Access token is missing!");
-        return;
-    }
-
-    try {
-        // Make the fetch request with the access token in headers
-        await fetch(apiURL, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,  // Add the token to the Authorization header
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            const body = JSON.parse(data.body); // Parse the body string into an array of objects
-            console.log(body);
-            createTable(body);  // Display the data in a table
-        })
-        .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
-        });
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-function showMetrics() {
-  window.location.href = "./metrics.html";
-}
-
-function showDashboards() {
-  window.location.href = "./dashboard.html";
-}
-
-function toggleDarkMode() {
-            document.body.classList.toggle("dark-mode");
-            const toggleBtn = document.querySelector(".toggle-btn2");
-
-            if (document.body.classList.contains("dark-mode")) {
-                toggleBtn.innerHTML = "☀️"; // Switch to sun
-            } else {
-                toggleBtn.innerHTML = "🌙"; // Switch to moon
-            }
-}
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
