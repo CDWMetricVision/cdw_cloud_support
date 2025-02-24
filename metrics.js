@@ -1087,7 +1087,7 @@ function accountsAndConnectInstancesObject() {
                 },
                 "baseAPIGatewayURL": "https://a37xf754ya.execute-api.us-east-1.amazonaws.com/csccloud"
             }
-        },
+        }
         
     ]
     return allAccountsList;
