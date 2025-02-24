@@ -1088,6 +1088,24 @@ function accountsAndConnectInstancesObject() {
                 "baseAPIGatewayURL": "https://a37xf754ya.execute-api.us-east-1.amazonaws.com/csccloud"
             }
         },
+        {
+            "MAS Sandbox Test1": {
+                "connectInstances": {
+                    "mastest1instance2": "921b9e21-6d50-4365-b861-297f61227bb8",
+                    "mastest1": "cd54d26a-fee3-4645-87da-6acae50962a5"
+                },
+                "baseAPIGatewayURL": "https://8vauowiu26.execute-api.us-east-1.amazonaws.com/test"
+            }
+        },
+        {
+            "MAS Sandbox Test2": {
+                "connectInstances": {
+                    "mastest2instance2": "d8445c54-35f2-4e65-ab0f-9c98889bdb0c",
+                    "mastest2": "ce2575a1-6ad8-4694-abd6-53acf392c698"
+                },
+                "baseAPIGatewayURL": "https://9v5jzdmc6a.execute-api.us-east-1.amazonaws.com/test"
+            }
+        }
         
     ]
     return allAccountsList;
