@@ -20,7 +20,7 @@ function showMetrics() {
   function getDashboardsAPI() {
     const savedDashboardsAPI = [
         {
-            "MAS Sandbox Development":"https://szw9nl20j5.execute-api.us-east-1.amazonaws.com/test",
+            "CDW Cloud MS":"https://a37xf754ya.execute-api.us-east-1.amazonaws.com/csccloud",
         },
         {
             "MAS Sandbox Test1":"https://8vauowiu26.execute-api.us-east-1.amazonaws.com/test",
@@ -34,10 +34,10 @@ function showMetrics() {
 function accountsAndConnectInstancesObject() {
     const allAccountsList = [
         {
-            "MAS Sandbox Development": {
+            "CDW Cloud MS": {
                 "connectInstances": {
-                    "masdevelopment": "08aaaa8c-2bbf-4571-8570-f853f6b7dba0",
-                    "masdevelopmentinstance2": "5c1408e0-cd47-4ba9-9b0c-c168752e2285"
+                    "cdwcloudms": "81929398-ea15-429d-8259-a85d54c05e9b",
+                    "cdwcloudsolutioncentre": "4c2a8892-8b0d-415d-84a5-9cadeba8c67a"
                 }
             }
         },
