@@ -53,7 +53,7 @@ function handleInputChange(event) {
 function getSavedDashboardsAPI() {
     const savedDashboardsAPI = [
         {
-            "CDW Cloud MS":"https://11iu54aaq1.execute-api.us-east-1.amazonaws.com/csc-cloud/getdashboards",
+            "CDW Cloud MS":"https://a37xf754ya.execute-api.us-east-1.amazonaws.com/csccloud/getdashboards",
         },
         {
             "MAS Sandbox Test1":"https://8vauowiu26.execute-api.us-east-1.amazonaws.com/test/getdashboards",
