@@ -5,7 +5,7 @@ function getAccountsAlarmsAPI() {
     const allAccountsAlarmsList = [
         {
             "CDW Cloud MS": {
-                "cloudWatchAPI": "https://11iu54aaq1.execute-api.us-east-1.amazonaws.com/csc-cloud/getalarm"
+                "cloudWatchAPI": "https://a37xf754ya.execute-api.us-east-1.amazonaws.com/csccloud/getalarm"
             }
         },
         {
