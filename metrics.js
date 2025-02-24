@@ -1080,7 +1080,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function accountsAndConnectInstancesObject() {
     const allAccountsList = [
         {
-            "CDW Ms Cloud": {
+            "CDW Cloud MS": {
                 "connectInstances": {
                     "cdwcloudms": "81929398-ea15-429d-8259-a85d54c05e9b",
                     "cdwcloudsolutioncentre": "4c2a8892-8b0d-415d-84a5-9cadeba8c67a"
